@@ -1,0 +1,19 @@
+--- a/sys/dev/usb/serial/uchcom.c
++++ b/sys/dev/usb/serial/uchcom.c
+@@ -645,6 +645,16 @@
+ 	div |= (sc->sc_chiptype != TYPE_CH343) ? 0x80 : 0x00;
+ 	idx = (factor << 8) | div;
+ 
++	/* CH340 revision 0x30 does not reliably accept baud settings via RESET. */
++	if (sc->sc_chiptype != TYPE_CH343 &&
++	    sc->sc_version == UCHCOM_VER_30) {
++		uchcom_write_reg(sc, UCHCOM_REG_BPS_PRE, div,
++		    UCHCOM_REG_BPS_DIV, factor);
++		uchcom_write_reg(sc, UCHCOM_REG_LCR1, lcr >> 8,
++		    UCHCOM_REG_LCR2, 0);
++		return;
++	}
++
+ 	uchcom_ctrl_write(sc, UCHCOM_REQ_RESET, lcr, idx);
+ }
+ 

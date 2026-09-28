@@ -1,0 +1,36 @@
+[build-system]
+requires = [
+    "setuptools>=61",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyagilentxgs600-tspspi"
+version = "0.0.1"
+description = "Unofficial Python library for the Agilent XGS-600 gauge controller"
+authors = [
+    { name = "Thomas Spielauer", email = "pypipackages01@tspi.at" }
+]
+readme = "README.md"
+license = { text = "BSD-3-Clause" }
+requires-python = ">=3.8"
+dependencies = [
+    "pylabdevs-tspspi>=0.0.8",
+    "pyserial>=3.5",
+    "paho-mqtt>=2.0"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering"
+]
+
+[project.scripts]
+xgs600mqtt = "agilentxgs600.mqttdaemon:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

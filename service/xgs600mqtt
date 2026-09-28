@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# PROVIDE: xgs600mqtt
+# REQUIRE: LOGIN NETWORKING rabbitmq
+# KEYWORD: shutdown
+
+. /etc/rc.subr
+
+name="xgs600mqtt"
+desc="Publish XGS-600 pressure readings to MQTT"
+rcvar="xgs600mqtt_enable"
+
+load_rc_config "$name"
+: ${xgs600mqtt_enable:="NO"}
+: ${xgs600mqtt_run_user:="nobody"}
+: ${xgs600mqtt_config:="/usr/local/etc/xgs600mqtt.conf"}
+: ${xgs600mqtt_python:="/usr/local/bin/python3"}
+: ${xgs600mqtt_pythonpath:=""}
+: ${xgs600mqtt_pidfile:="/var/run/xgs600mqtt.pid"}
+
+pidfile="${xgs600mqtt_pidfile}"
+procname="/usr/sbin/daemon"
+command="/usr/sbin/daemon"
+required_files="${xgs600mqtt_config}"
+
+if [ -n "${xgs600mqtt_pythonpath}" ]; then
+    command_args="-c -f -P ${pidfile} -R 5 -S -T ${name} -u ${xgs600mqtt_run_user} /usr/bin/env PYTHONPATH=${xgs600mqtt_pythonpath} ${xgs600mqtt_python} -m agilentxgs600.mqttdaemon --config ${xgs600mqtt_config}"
+else
+    command_args="-c -f -P ${pidfile} -R 5 -S -T ${name} -u ${xgs600mqtt_run_user} ${xgs600mqtt_python} -m agilentxgs600.mqttdaemon --config ${xgs600mqtt_config}"
+fi
+
+run_rc_command "$1"

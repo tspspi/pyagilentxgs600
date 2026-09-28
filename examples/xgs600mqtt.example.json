@@ -1,0 +1,14 @@
+{
+  "mqtt_host": "broker.example.org",
+  "mqtt_port": 1883,
+  "mqtt_user": "replace-with-publisher-user",
+  "mqtt_password": "replace-with-publisher-password",
+  "gauge": "xgs600",
+  "gauge_name": "example-gauge",
+  "serial_port": "/dev/ttyUSB0",
+  "gauge_address": 0,
+  "sensor": "T1",
+  "base_topic": "/example/site",
+  "pressure_topic": "/example/site/status/pressure/example-gauge",
+  "interval_seconds": 10
+}
